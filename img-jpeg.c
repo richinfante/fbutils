@@ -107,8 +107,11 @@ image_t* read_jpeg_file (char * filename) {
   image->data = malloc(sizeof(int) * cinfo.output_width * cinfo.output_height);
   image->width = cinfo.output_width;
   image->height = cinfo.output_height;
+  
+#if DEBUG
   printf("JPEG %dx%d\n", image->width, image->height);
   printf("output components: %d, stride: %d\n", cinfo.output_components, row_stride);
+#endif
   int row = 0;
 
    while (cinfo.output_scanline < cinfo.output_height) {
@@ -149,7 +152,9 @@ image_t* read_jpeg_file (char * filename) {
     * warnings occurred (test whether jerr.pub.num_warnings is nonzero).
     */
  
+#if DEBUG
    printf("JPEG done.\n");
+#endif
    /* And we're done! */
    return image;
  }

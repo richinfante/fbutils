@@ -85,7 +85,7 @@ image_t * scale(image_t*image, int w, int h) {
 void draw_array(int x, int y, int w, int h, int* array, context_t* context) {
   // w and h are the size of the array.
   for(int i = 0; i < h; i++) {
-    memcpy(&context[context->width * y + i * context->width + x], &array[i * w], sizeof(int) * w);
+    memcpy(&context->data[context->width * y + i * context->width + x], &array[i * w], sizeof(int) * w);
   }
 }
 
@@ -100,7 +100,7 @@ void draw_rect(int x, int y, int w, int h, context_t* context, int color) {
 
     // make it faster: memcpy the first row.
     for(int ry = 1; ry < h; ry++) {
-        memcpy(&context[context->width * y + context->width * ry + x], &context[context->width * y + x], w*sizeof(int));
+        memcpy(&context->data[context->width * y + context->width * ry + x], &context->data[context->width * y + x], w*sizeof(int));
     }
 }
 
@@ -109,7 +109,7 @@ void clear_context_color(context_t* context, int color) {
 }
 
 void clear_context(context_t* context) {
-    memset(context, 0, context->width*context->height*sizeof(int));  
+    memset(context->data, 0, context->width * context->height * sizeof(int));  
 }
 
 void test_pattern(context_t* context) {

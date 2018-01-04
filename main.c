@@ -35,22 +35,30 @@ void sig_handler(int signo) {
 
 int main()
 {
+    printf("Hello\n");
+
     // Intercept SIGINT so we can shut down graphics loops.
     if (signal(SIGINT, sig_handler) == SIG_ERR) {
          printf("\ncan't catch SIGINT\n");
     }
 
+
+    context_t * context = context_create();
+    // fontmap_t * fontmap = fontmap_default();
+    printf("[+] Graphics Context: 0x%x\n", context);
+
+    
     // Attempt to open the 
     int ttyfd = open("/dev/tty1", O_RDWR);
     if (ttyfd == -1) {
-      printf("Error: could not open the tty\n");
+      printf("[!] Error: could not open the tty\n");
     } else {
       ioctl(ttyfd, KDSETMODE, KD_GRAPHICS);
     }
 
-    context_t * context = context_create();
-    // fontmap_t * fontmap = fontmap_default();
-
+    
+    
+   
     if(context != NULL){
         image_t * jpegImage = read_jpeg_file("./nyc.jpg");
         image_t * scaledBackgroundImage = scale(jpegImage, context->width, context->height);
@@ -64,16 +72,16 @@ int main()
         // fontmap_free(fontmap);
         context_release(context);
     }
-
+    
     if (ttyfd == -1) {
-      printf("Error: could not open the tty\n");
+      printf("[!] Error: could not open the tty\n");
     } else {
       ioctl(ttyfd, KDSETMODE, KD_TEXT);
     }
 
     close(ttyfd);
     
-    printf("shutdown successful.\n\n");
+    printf("[+] Shutdown successful.\n");
     return 0;
 }
  
