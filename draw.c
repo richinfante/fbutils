@@ -82,10 +82,58 @@ image_t * scale(image_t*image, int w, int h) {
 }
 
 // !! This operation is potentially unsafe. Use drawImage. It's harder to mess up.
+// X and w are the size of the array.
 void draw_array(int x, int y, int w, int h, int* array, context_t* context) {
-  // w and h are the size of the array.
-  for(int i = 0; i < h; i++) {
-    memcpy(&context->data[context->width * y + i * context->width + x], &array[i * w], sizeof(int) * w);
+  // Ignore draws out of bounds
+  if (x > context->width || y > context->height) {
+    return;
+  }
+
+  // Ignore draws out of bounds
+  if (x + w < 0 || y + h < 0) {
+    return;
+  }
+
+  // Column and row correction for partial onscreen images
+  int cy = 0;
+  int cx = 0; 
+
+  // if y is less than 0, trim that many lines off the render.
+  if (y < 0) {
+    cy = -y;
+  }
+
+  // If x is less than 0, trim that many pixels off the render line.
+  if (x < 0) {
+    cx = -x;
+  }
+
+  // Number of items in a line
+  int line_width = (w - cx);
+
+  // Number of lines total.
+  // We don't subtract cy because the loop starts with cy already advanced.
+  int line_count = h;
+
+  // If the end of the line goes offscreen, trim that many pixels off the
+  // row.
+  if (x + w > context->width) {
+    line_width -= ((x + w) - context->width);
+  }
+
+  // If the number of rows is more than the height of the context, trim
+  // them off.
+  if (y + h > context->height) {
+    line_count -= ((y + h) - context->height);
+  }
+
+  for (cy; cy < line_count; cy++) {
+    // Draw each graphics line.
+    memcpy(
+        &context->data[context->width * y + context->width * cy + x + cx], 
+        &array[cy * w] + cx, 
+        sizeof(int) * line_width
+    );
   }
 }
 
@@ -94,13 +142,49 @@ void draw_image(int x, int y, image_t * image, context_t* context) {
 }
 
 void draw_rect(int x, int y, int w, int h, context_t* context, int color) {
-    for(int rx = x; rx<x+w; rx++) {
+    // Ignore draws out of bounds
+    if (x > context->width || y > context->height) {
+        return;
+    }
+
+    // Ignore draws out of bounds
+    if(x + w < 0 || y + h < 0) {
+        return;
+    }
+    // Trim offscreen pixels
+    if (x < 0) {
+        w += x;
+        x = 0;
+    }
+
+    // Trim offscreen lines
+    if (y < 0) {
+        h += y;
+        y = 0;
+    }
+
+    // Trim offscreen pixels
+    if (x + w > context->width) {
+        w -= ((x + w) - context->width);
+    }
+
+    // Trim offscreen lines.
+    if (y + h > context->height) {
+       h -= ((y + h) - context->height);
+    }
+
+    // Set the first line.
+    for (int rx = x; rx < x+w; rx++) {
         set_pixel(rx, y, context, color);
     }
 
-    // make it faster: memcpy the first row.
-    for(int ry = 1; ry < h; ry++) {
-        memcpy(&context->data[context->width * y + context->width * ry + x], &context->data[context->width * y + x], w*sizeof(int));
+    // Repeat the first line.
+    for (int ry = 1; ry < h; ry++) {
+        memcpy(
+            &context->data[context->width * y + context->width * ry + x], &
+            context->data[context->width * y + x], 
+            w*sizeof(int)
+        );
     }
 }
 
