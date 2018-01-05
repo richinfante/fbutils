@@ -48,10 +48,7 @@ void sig_handler(int signo) {
     }
 }
 
-int main()
-{
-    printf("Hello\n");
-
+int main() {
     // Intercept SIGINT so we can shut down graphics loops.
     if (signal(SIGINT, sig_handler) == SIG_ERR) {
          printf("\ncan't catch SIGINT\n");
@@ -91,7 +88,7 @@ int main()
         draw_rect(context->width - 100, -100, 200, 200, context, 0x00FF00);
         draw_rect(-100, context->height - 100, 200, 200, context, 0x0000FF);
         draw_rect(context->width / 2 - 200, context->height / 2 - 200, 400, 400, context, 0x00FFFF);
-      
+        // draw_string(200, 200, "Hello, World!", fontmap, context);      
         while (runflag) {
             sleep(1);
         }

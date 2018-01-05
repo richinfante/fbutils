@@ -8,7 +8,7 @@ all: fbdemo
 %.o: %.c
 	$(CC) -c $(CFLAGS) $^ -o $@
 
-fbdemo: main.o draw.o img-png.o img-jpeg.o
+fbdemo: main.o draw.o font.o img-png.o img-jpeg.o
 	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
 clean: 

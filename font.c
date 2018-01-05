@@ -762,6 +762,6 @@ void draw_string(int x, int y, char * string, fontmap_t * fontmap, context_t * c
   for(int i = 0; i < length; i++) {
     glyph_t * charPtr = &fontmap->map[(int) string[i]];
     if(charPtr == NULL) continue;
-    draw_glyph(9 * i, 1, charPtr, context);
+    draw_glyph(x + 9 * i, y + 1, charPtr, context);
   }
 }
