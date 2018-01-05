@@ -5,8 +5,11 @@ BINFILE=fbdemo
 
 all: fbdemo
 
-fbdemo: 
-	$(CC) $(CFLAGS) *.c $(LFLAGS) -o $(BINFILE)
+%.o: %.c
+	$(CC) -c $(CFLAGS) $^ -o $@
+
+fbdemo: main.o draw.o img-png.o img-jpeg.o
+	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
 clean: 
 	rm -rf *.o $(BINFILE)
