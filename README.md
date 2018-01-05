@@ -6,3 +6,6 @@ At it's heart, this project aims to allow programs running on a small device suc
 ## Dependencies
 Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG
 functions.
+
+## Licence
+MIT
