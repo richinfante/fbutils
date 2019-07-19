@@ -4,8 +4,15 @@
 At it's heart, this project aims to allow programs running on a small device such as a raspberry pi to be able to draw graphics using a simple API and without needing the X window system.
 
 ## Dependencies
-Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG
-functions.
+Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG functions.
+```bash
+sudo apt-get install libpng-dev libjpeg-dev
+```
+
+## Building the demo
+```bash
+make
+```
 
 ## Licence
 MIT
