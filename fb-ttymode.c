@@ -28,7 +28,7 @@ int main(int arcg, char *argv[]) {
   printf("using tty: %c", tty);
 
   // Attempt to open the 
-  ttyfd = open(tty, O_RDWR);
+  int ttyfd = open(tty, O_RDWR);
   if (ttyfd == -1) {
     printf("[!] Error: could not open the tty\n");
   } else {
