@@ -20,15 +20,17 @@
 #include <sys/kd.h>
 
 int main(int argc, char *argv[]) {
-  char* tty = "/dev/tty1";
-  if (argc == 2) {
-    tty = argv[1];
-  }
-
-  printf("using tty: %c", tty);
+  
 
   // Attempt to open the 
-  int ttyfd = open(tty, O_RDWR);
+  int ttyfd;
+  if (argc == 2) {
+    printf("using tty: %s", argv[1]);
+    ttyfd = open(argv[1], O_RDWR);
+  } else {
+    printf("using tty1");
+    ttyfd = open("/dev/tty1", O_RDWR)
+  }
   if (ttyfd == -1) {
     printf("[!] Error: could not open the tty\n");
   } else {
@@ -36,8 +38,10 @@ int main(int argc, char *argv[]) {
     // If you're getting segfaults comment this out so you don't need to
     // reboot to fix the tty.
     if (strcmp(argv[0], "graphics") == 0) {
+      printf("enabling graphics mode");
       ioctl(ttyfd, KDSETMODE, KD_GRAPHICS);
     } else {
+      printf("enabling text mode");
       ioctl(ttyfd, KDSETMODE, KD_TEXT);
     }
   }
