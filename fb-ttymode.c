@@ -19,7 +19,7 @@
 #include <sys/ioctl.h>
 #include <sys/kd.h>
 
-int main(int arcg, char *argv[]) {
+int main(int argc, char *argv[]) {
   char* tty = "/dev/tty1";
   if (argc == 2) {
     tty = argv[1];
