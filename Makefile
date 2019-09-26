@@ -3,7 +3,7 @@ CCFLAGS=-g -std=c99 -Wall -DDEBUG
 LFLAGS=-lm -lpng -ljpeg
 BINFILE=fbdemo fb-ttymode fb-clear fb-pngdraw fb-describe
 
-all: fbdemo fb-ttymode fb-clear fb-pngdraw fb-describe
+all: fbdemo fb-ttymode fb-clear fb-pngdraw fb-jpgdraw fb-describe
 
 %.o: %.c
 		$(CC) -c $(CFLAGS) $^ -o $@
@@ -18,6 +18,9 @@ fb-clear: fb-clearscreen.o draw.o
 		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
 fb-pngdraw: fb-pngdraw.o draw.o img-png.o
+		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+
+fb-jpgdraw: fb-jpgdraw.o draw.o img-jpeg.o
 		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
 fb-describe: fb-describe.o draw.o
