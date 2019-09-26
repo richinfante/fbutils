@@ -193,7 +193,7 @@ void clear_context_color(context_t* context, int color) {
 }
 
 void clear_context_gray(context_t* context, unsigned char gray) {
-    memset(context->data, 0, context->width * context->height * sizeof(int));  
+    memset(context->data, gray, context->width * context->height * sizeof(int));  
 }
 
 void clear_context(context_t* context) {
