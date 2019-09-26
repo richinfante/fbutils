@@ -22,6 +22,7 @@ void draw_array(int x, int y, int w, int h, int* array, context_t* context);
 void draw_image(int x, int y, image_t * image, context_t* context);
 void draw_rect(int x, int y, int w, int h, context_t* context, int color);
 void clear_context_color(context_t* context, int color);
+void clear_context_gray(context_t* context, unsigned char gray);
 void clear_context(context_t* context);
 void test_pattern(context_t* context);
 

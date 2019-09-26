@@ -25,3 +25,9 @@ fb-describe: fb-describe.o draw.o
 
 clean:
 		rm -rf *.o $(BINFILE)
+
+install:
+		sudo cp fb-ttymode /usr/local/bin
+		sudo cp fb-clear /usr/local/bin
+		sudo cp fb-pngdraw /usr/local/bin
+		sudo cp fb-describe /usr/local/bin

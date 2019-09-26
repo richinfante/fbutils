@@ -21,11 +21,22 @@
 
 #include "draw.h"
 
-int main() {
+int main(int argc, char* argv[]) {
     context_t * context = context_create();
    
     if(context != NULL){
-        clear_context(context);
+       unsigned char color = 0x0;
+        for (int i = 0; i < argc; i++) {
+            if (strcmp(argv[i], "-g") == 0 && i+1 < argc) {
+                color = aroi(argv[i+1]) & 0xFF;
+            }
+        }
+
+        if (color == 0x0) {
+          clear_context(context);
+        } else {
+          clear_context_gray(context, color);
+        }
         context_release(context);
     }
     return 0;
