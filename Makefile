@@ -17,5 +17,8 @@ fb-ttymode: fb-ttymode.o
 fb-clear: fb-clearscreen.o draw.o
 	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
+fb-pngdraw: fb-imgdraw draw.o img-png.o
+	$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+
 clean:
 	rm -rf *.o $(BINFILE)
