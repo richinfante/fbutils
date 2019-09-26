@@ -21,14 +21,24 @@
 
 int main(int argc, char *argv[]) {
   // Attempt to open the tty specified
-  int ttyfd;
-  if (argc == 3) {
-    printf("using tty: %s\n", argv[1]);
-    ttyfd = open(argv[1], O_RDWR);
-  } else {
-    printf("using /dev/tty1 (default)\n");
-    ttyfd = open("/dev/tty1", O_RDWR);
+  char* tty = "/dev/tty1";
+  
+  int mode = KD_TEXT;
+
+  for (int i = 0; i < argc; i++) {
+    if (strcmp(argv[i], "--tty") == 0 && i+1 < argc) {
+        tty = argv[i+1]
+    }
+
+    if (strcmp(argv[i], "--mode") == 0 && i+1 < argc) {
+      if (strcmp(argv[i+1], "graphics") == 0) {
+        mode = KD_GRAPHICS;
+      }
+    }
   }
+
+  int ttyfd = open(tty, O_RDWR);
+
   if (ttyfd == -1) {
     printf("[!] Error: could not open the tty\n");
   } else {
