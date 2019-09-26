@@ -26,7 +26,6 @@ int main() {
    
     if(context != NULL){
         printf("%s %d %d",  context->fb_name, context->width, context->height);
-        context_release(context);
     } else {
         printf("Error: could not describe framebuffer.\n");
         return 1;
