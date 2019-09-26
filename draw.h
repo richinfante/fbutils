@@ -27,5 +27,6 @@ void test_pattern(context_t* context);
 
 void context_release(context_t * context);
 context_t * context_create();
+context_t * context_get_dimensions();
 
 #endif
