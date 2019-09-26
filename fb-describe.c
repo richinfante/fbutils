@@ -25,7 +25,7 @@ int main() {
     context_t * context = context_get_dimensions();
    
     if(context != NULL){
-        printf("%s %d %d",  context->fb_name, context->width, context->height)
+        printf("%s %d %d",  context->fb_name, context->width, context->height);
         context_release(context);
     } else {
         printf("Error: could not describe framebuffer.\n");
