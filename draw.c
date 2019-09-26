@@ -278,5 +278,48 @@ context_t * context_create() {
     return context;
 }
 
+context_t * context_get_dimensions() {
+    char *FB_NAME = "/dev/fb0";
+    void* mapped_ptr = NULL;
+    struct fb_fix_screeninfo fb_fixinfo;
+    struct fb_var_screeninfo fb_varinfo;
+    int fb_file_desc;
+    int fb_size = 0;
+
+    // Open the framebuffer device in read write
+    fb_file_desc = open(FB_NAME, O_RDWR);
+    if (fb_file_desc < 0) {
+        printf("Unable to open %s.\n", FB_NAME);
+        return NULL;
+    }
+    //Do Ioctl. Retrieve fixed screen info.
+    if (ioctl(fb_file_desc, FBIOGET_FSCREENINFO, &fb_fixinfo) < 0) {
+        printf("get fixed screen info failed: %s\n",
+               strerror(errno));
+        close(fb_file_desc);
+        return NULL;
+    }
+    // Do Ioctl. Get the variable screen info.
+    if (ioctl(fb_file_desc, FBIOGET_VSCREENINFO, &fb_varinfo) < 0) {
+        printf("Unable to retrieve variable screen info: %s\n",
+               strerror(errno));
+        close(fb_file_desc);
+        return NULL;
+    }
+
+    // Calculate the size to mmap
+    fb_size = fb_fixinfo.line_length * fb_varinfo.yres;
+    
+    close(fb_file_desc);
+
+    context_t * context = malloc(sizeof(context_t));
+    context->data = NULL;
+    context->width = fb_fixinfo.line_length / 4;
+    context->height = fb_varinfo.yres;
+    context->fb_file_desc = NULL;
+    context->fb_name = FB_NAME;
+    return context;
+}
+
 
 
