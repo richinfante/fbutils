@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
        unsigned char color = 0x0;
         for (int i = 0; i < argc; i++) {
             if (strcmp(argv[i], "-g") == 0 && i+1 < argc) {
-                color = aroi(argv[i+1]) & 0xFF;
+                color = atoi(argv[i+1]) & 0xFF;
             }
         }
 
