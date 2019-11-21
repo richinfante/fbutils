@@ -1,6 +1,11 @@
 # Framebuffer Graphics
 Write directly to the linux framebuffer. I use this from Raspbian Lite on multiple Raspberry Pi devices for displaying monitoring dashboards with pre-rendered graphs from AWS CloudWatch.
 
+Note: you may need/want to `usermod` your current user to add it into the `video` group like so, to avoid needing to use `sudo` to run each of these commands. The `ttymode` command still requires sudo, however:
+```bash
+sudo usermod -G video $(whoami)
+```
+
 ## Dependencies
 Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG functions. `make` is required to build.
 ```bash
