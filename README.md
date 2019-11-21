@@ -2,9 +2,9 @@
 Write directly to the linux framebuffer. I use this from Raspbian Lite on multiple Raspberry Pi devices for displaying monitoring dashboards with pre-rendered graphs from AWS CloudWatch.
 
 ## Dependencies
-Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG functions.
+Install `libpng-dev` and `libjpeg-dev` if you are using the PNG or JPEG functions. `make` is required to build.
 ```bash
-sudo apt-get install libpng-dev libjpeg-dev
+sudo apt-get install libpng-dev libjpeg-dev make
 ```
 
 ## Building
