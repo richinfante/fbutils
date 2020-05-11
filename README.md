@@ -48,5 +48,9 @@ make
     - `y` _(optional)_ default: 0 - the y position to draw
     - `w` _(optional)_ default: display width - the width of the image
     - `h` _(optional)_ default: display height - the height of the image
+  - example:
+  ```bash
+  $ fb-pngdraw -f foo.png -x 0 -y 0 -w 100 -h 100
+  ```
 ## Licence
 MIT
