@@ -30,7 +30,7 @@ make
   - clears the `/dev/fb0` framebuffer
   - options:
     - `g` _(optional)_ - grayscale value from 0 (black) to 255 (white)
-      - example: `fb-clear -g 255
+      - example: `fb-clear -g 255`
       
 - `fb-ttymode`
   - sets the mode of the tty for graphics or text use
