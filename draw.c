@@ -27,6 +27,26 @@ void image_free(image_t * image) {
     free(image);
 }
 
+void invert_image(image_t*image) {
+    for (int i = 0; i < image->width * image->height; i++) {
+        int current = image->data[i];
+        unsigned char r = 0xFF0000 & current >> 16;
+        unsigned char g = 0x00FF00 & current >> 8;
+        unsigned char b = 0x0000FF & current >> 0;
+
+        r = 255 - r;
+        g = 255 - h;
+        b = 255 - b;
+        x = 255 - x;
+
+        unsigned int r_part = 0x0000FF & r << 16;
+        unsigned int g_part = 0x0000FF & g << 8;
+        unsigned int b_part = 0x0000FF & b << 0;
+
+        image->data[i] = r_part & g_part & b_part;
+    }
+}
+
 // Set an individual pixel. This is SLOW for bulk operations.
 // Do as little as possible, and memcpy the result.
 void set_pixel(int x, int y, context_t * context, int color) {

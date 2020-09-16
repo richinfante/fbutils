@@ -20,6 +20,9 @@ fb-clear: fb-clearscreen.o draw.o
 fb-pngdraw: fb-pngdraw.o draw.o img-png.o
 		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
+fb-pngdraw: fb-jpgdraw.o draw.o img-jpeg.o
+		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
+
 fb-describe: fb-describe.o draw.o
 		$(CC) $(CFLAGS) $(LFLAGS) $^ -o $@
 
