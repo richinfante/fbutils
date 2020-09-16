@@ -30,20 +30,22 @@ void image_free(image_t * image) {
 void invert_image(image_t*image) {
     for (int i = 0; i < image->width * image->height; i++) {
         int current = image->data[i];
-        unsigned char r = 0xFF0000 & current >> 16;
-        unsigned char g = 0x00FF00 & current >> 8;
-        unsigned char b = 0x0000FF & current >> 0;
+        unsigned char r = (0xFF0000 & current) >> 16;
+        unsigned char g = (0x00FF00 & current) >> 8;
+        unsigned char b = (0x0000FF & current) >> 0;
 
-        r = 255 - r;
-        g = 255 - h;
-        b = 255 - b;
-        x = 255 - x;
+        unsigned char newr = 255 - r;
+        unsigned char newg = 255 - g;
+        unsigned char newb = 255 - b;
+  
+        unsigned int r_part = (0x0000FF & newr) << 16;
+        unsigned int g_part = (0x0000FF & newg) << 8;
+        unsigned int b_part = (0x0000FF & newb) << 0;
 
-        unsigned int r_part = 0x0000FF & r << 16;
-        unsigned int g_part = 0x0000FF & g << 8;
-        unsigned int b_part = 0x0000FF & b << 0;
+	int newcolor = r_part | g_part | b_part;
+        image->data[i] = newcolor;
 
-        image->data[i] = r_part & g_part & b_part;
+	// printf("transform(invert): %d (%#010x) (%u,%u,%u)  -> (%u,%u,%u) ->  (%d, %d, %d), %#010x\n", i, current, r, g, b, newr, newg, newb, r_part, g_part, b_part, newcolor); 	
     }
 }
 
