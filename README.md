@@ -52,5 +52,11 @@ make
   ```bash
   $ fb-pngdraw -f foo.png -x 0 -y 0 -w 100 -h 100
   ```
+
+## TODO
+- Add text rendering function with freetype
+- Add compositing which allows for multiple draw commands to be rendered to an offscreen buffer, and then rendered
+- Add alpha rendering ability
+
 ## Licence
 MIT
