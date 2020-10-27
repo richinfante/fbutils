@@ -15,6 +15,7 @@ typedef struct {
   int fb_file_desc;
 } context_t;
 
+void invert_image(image_t * image);
 void image_free(image_t * image);
 void set_pixel(int x, int y, context_t * context, int color);
 image_t * scale(image_t*image, int w, int h);
