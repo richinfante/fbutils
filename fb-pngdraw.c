@@ -62,6 +62,7 @@ int main(int argc, char* argv[]) {
         if (file != NULL) {
             image_t * png_image = read_png_file(file);
 
+            // Invert image filter
             if (invert == 1) {
                 invert_image(png_image);
             }

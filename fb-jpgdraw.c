@@ -31,6 +31,7 @@ int main(int argc, char* argv[]) {
         int height = context->width;
         int x = 0;
         int y = 0;
+        int invert = 0;
 
         for (int i = 0; i < argc; i++) {
             if (strcmp(argv[i], "-f") == 0 && i+1 < argc) {
@@ -52,10 +53,20 @@ int main(int argc, char* argv[]) {
             if (strcmp(argv[i], "-y") == 0 && i+1 < argc) {
                 y = atoi(argv[i+1]);
             }
+
+            if (strcmp(argv[i], "-invert") == 0) {
+                invert = 1;
+            }
         }
 
         if (file != NULL) {
             image_t * jpeg_image = read_jpeg_file(file);
+
+            // Image invert filter
+            if (invert == 1) {
+                invert_image(jpeg_image);
+            }
+
             image_t * scaled_image = scale(jpeg_image, width, height);
         
             draw_image(x, y, scaled_image, context);
