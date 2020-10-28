@@ -1,6 +1,6 @@
 CC=gcc
 CCFLAGS=-g -std=c99 -Wall -Wextra -DDEBUG
-LFLAGS=-lm -lpng -ljpeg
+LFLAGS=-lm -lpng16 -ljpeg
 BINFILE=fbdemo fb-ttymode fb-clear fb-pngdraw fb-describe fb-jpgdraw
 
 all: fbdemo fb-ttymode fb-clear fb-pngdraw fb-describe fb-jpgdraw
