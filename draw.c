@@ -17,6 +17,7 @@
 #include <signal.h>
 #include <unistd.h>
 
+
 // Free an image
 void image_free(image_t * image) {
     free(image->data);
@@ -246,12 +247,57 @@ void test_pattern(context_t* context) {
     }
 }
 
+// Release a context and deallocate all resources
 void context_release(context_t * context) {
-    munmap(context->data, context->width * context->height);
-    close(context->fb_file_desc);
+    // If mmap'd, unmap the context
+    if (context->mode == CONTEXT_MODE_MMAP) {
+        munmap(context->data, context->width * context->height);
+    }
+
+    // If malloc'd, free the memory segment
+    if (context->mode == CONTEXT_MODE_MALLOC) {
+        free(context->data);
+    }
+    if (context->fb_file_desc > 0) {
+        close(context->fb_file_desc);
+    }
     context->data = NULL;
     context->fb_file_desc = 0;
     free(context);
+}
+
+int context_copy(context_t* from, context_t* to) {
+    // contexts must be "real" and not deallocated or dummies
+    if (from->data == NULL || to->data == NULL) {
+        return -1;
+    }
+
+    // For this operation, we must just use a direct write
+    if (from->width != to->width || from->height != to->height) {
+        return -2;
+    }
+
+    memcpy(
+        &to->data, 
+        &from->data, 
+        sizeof(int) * from->width * from->height
+    );
+
+    return 0;
+}
+
+// Create a context in-memory for operations
+// This can be used as a buffer and then copied to the fb using context_copy(context_t* from, context_t* to)
+context_t * context_temporary (int width, int height) {
+    char* FB_NAME = "(in-memory temp context)";
+    context_t * context = malloc(sizeof(context_t));
+    context->data = malloc(sizeof(int) * width * height);
+    context->mode = CONTEXT_MODE_MALLOC;
+    context->width = width;
+    context->height = height;
+    context->fb_file_desc = -1;
+    context->fb_name = FB_NAME;
+    return context;
 }
 
 context_t * context_create() {
@@ -297,6 +343,7 @@ context_t * context_create() {
 
     context_t * context = malloc(sizeof(context_t));
     context->data = (int *) mapped_ptr;
+    context->mode = CONTEXT_MODE_MMAP;
     context->width = fb_fixinfo.line_length / 4;
     context->height = fb_varinfo.yres;
     context->fb_file_desc = fb_file_desc;
@@ -339,6 +386,7 @@ context_t * context_get_dimensions() {
     close(fb_file_desc);
 
     context_t * context = malloc(sizeof(context_t));
+    context->mode = CONTEXT_MODE_DUMMY;
     context->data = NULL;
     context->width = fb_fixinfo.line_length / 4;
     context->height = fb_varinfo.yres;
