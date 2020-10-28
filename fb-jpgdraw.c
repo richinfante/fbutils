@@ -20,7 +20,7 @@
 #include <sys/kd.h>
 
 #include "draw.h"
-#include "img-png.h"
+#include "img-jpeg.h"
 
 int main(int argc, char* argv[]) {
     context_t * context = context_create();
@@ -60,14 +60,14 @@ int main(int argc, char* argv[]) {
         }
 
         if (file != NULL) {
-            image_t * png_image = read_png_file(file);
+            image_t * jpeg_image = read_jpeg_file(file);
 
-            // Invert image filter
+            // Image invert filter
             if (invert == 1) {
-                invert_image(png_image);
+                invert_image(jpeg_image);
             }
-            
-            image_t * scaled_image = scale(png_image, width, height);
+
+            image_t * scaled_image = scale(jpeg_image, width, height);
         
             draw_image(x, y, scaled_image, context);
         } else {

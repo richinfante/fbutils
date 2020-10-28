@@ -17,14 +17,36 @@
 #include <signal.h>
 #include <unistd.h>
 
-
-
+// Free an image
 void image_free(image_t * image) {
     free(image->data);
     image->width = 0;
     image->height = 0;
     image->data = NULL;
     free(image);
+}
+
+// Invert an image
+void invert_image(image_t*image) {
+    for (int i = 0; i < image->width * image->height; i++) {
+        int current = image->data[i];
+        unsigned char r = (0xFF0000 & current) >> 16;
+        unsigned char g = (0x00FF00 & current) >> 8;
+        unsigned char b = (0x0000FF & current) >> 0;
+
+        unsigned char newr = 255 - r;
+        unsigned char newg = 255 - g;
+        unsigned char newb = 255 - b;
+  
+        unsigned int r_part = (0x0000FF & newr) << 16;
+        unsigned int g_part = (0x0000FF & newg) << 8;
+        unsigned int b_part = (0x0000FF & newb) << 0;
+
+	int newcolor = r_part | g_part | b_part;
+        image->data[i] = newcolor;
+
+	// printf("transform(invert): %d (%#010x) (%u,%u,%u)  -> (%u,%u,%u) ->  (%d, %d, %d), %#010x\n", i, current, r, g, b, newr, newg, newb, r_part, g_part, b_part, newcolor); 	
+    }
 }
 
 // Set an individual pixel. This is SLOW for bulk operations.
@@ -320,7 +342,7 @@ context_t * context_get_dimensions() {
     context->data = NULL;
     context->width = fb_fixinfo.line_length / 4;
     context->height = fb_varinfo.yres;
-    context->fb_file_desc = NULL;
+    context->fb_file_desc = -1;  // assign fd to -1
     context->fb_name = FB_NAME;
     return context;
 }
