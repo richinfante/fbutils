@@ -40,8 +40,8 @@ make
   $ fb-ttymode text
   ```
   
-- `fb-pngdraw`
-  - draws a png image to the framebuffer
+- `fb-pngdraw` / `fb-jpgdraw`
+  - draws an image to the framebuffer
   - options:
     - `f` - path to the png file to draw.
     - `x` _(optional)_ default: 0 - the x position to draw
@@ -51,6 +51,7 @@ make
   - example:
   ```bash
   $ fb-pngdraw -f foo.png -x 0 -y 0 -w 100 -h 100
+  $ fb-jpgdraw -f foo.jpg -x 0 -y 0 -w 100 -h 100
   ```
 
 ## TODO
