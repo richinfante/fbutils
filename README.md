@@ -43,7 +43,7 @@ make
 - `fb-pngdraw` / `fb-jpgdraw`
   - draws an image to the framebuffer
   - options:
-    - `f` - path to the png file to draw.
+    - `f` - path to the image file to draw.
     - `x` _(optional)_ default: 0 - the x position to draw
     - `y` _(optional)_ default: 0 - the y position to draw
     - `w` _(optional)_ default: display width - the width of the image
