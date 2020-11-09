@@ -15,7 +15,22 @@ typedef struct {
   int fb_file_desc;
 } context_t;
 
+// Commonly used mask values
+#define MASK_RED 0xFF0000
+#define MASK_GREEN 0x00FF00
+#define MASK_BLUE 0x0000FF
+#define MASK_YELLOW 0xFFFF00
+#define MASK_CYAN 0x00FFFF
+#define MASK_MAGENTA 0xFF00FF
+#define MASK_WHITE 0xFFFFFF
+#define MASK_NONE 0x000000
+
+// Hue threshold of 20 is the default
+#define HUE_THRESHOLD_DEFAULT 20
+
+void grayscale_image(image_t * image);
 void invert_image(image_t * image);
+void hueify_image(image_t * image, unsigned int mask, int min_level);
 void image_free(image_t * image);
 void set_pixel(int x, int y, context_t * context, int color);
 image_t * scale(image_t*image, int w, int h);

@@ -31,7 +31,11 @@ int main(int argc, char* argv[]) {
         int height = context->width;
         int x = 0;
         int y = 0;
+        int grayscale = 0;
+        int grayscale_threshold = HUE_THRESHOLD_DEFAULT;
         int invert = 0;
+        int hue_shift = 0;
+        int hue_mask = MASK_NONE;
 
         for (int i = 0; i < argc; i++) {
             if (strcmp(argv[i], "-f") == 0 && i+1 < argc) {
@@ -54,8 +58,43 @@ int main(int argc, char* argv[]) {
                 y = atoi(argv[i+1]);
             }
 
+            if (strcmp(argv[i], "-hue-threshold") == 0 && i+1 < argc) {
+		        grayscale_threshold = atoi(argv[i+1]);
+	        }
+
+            if (strcmp(argv[i], "-grayscale") == 0) {
+                grayscale = 1;
+            }
+
             if (strcmp(argv[i], "-invert") == 0) {
                 invert = 1;
+            }
+
+            if (strcmp(argv[i], "-hue") == 0 && i+1 < argc) {
+
+                // enable hue shifting
+                hue_shift = 1;
+
+                // iterate over valid types of hues
+                for (int j = 0; j < strlen(argv[i+1]); j++) {
+                  
+                    // Mask types (rgbcymw)
+                    if (argv[i+1][j] == 'r') {
+                        hue_mask = hue_mask | MASK_RED;
+                    } else if (argv[i+1][j] == 'g') {
+                        hue_mask = hue_mask | MASK_GREEN;
+                    } else if (argv[i+1][j] == 'b') {
+                        hue_mask = hue_mask | MASK_BLUE;
+                    } else if (argv[i+1][j] == 'c') {
+                        hue_mask = hue_mask | MASK_CYAN;
+                    } else if (argv[i+1][j] == 'y') {
+                        hue_mask = hue_mask | MASK_YELLOW;
+                    } else if (argv[i+1][j] == 'm') {
+                        hue_mask = hue_mask | MASK_MAGENTA;
+                    } else if (argv[i+1][j] == 'w') {
+                        hue_mask = hue_mask | MASK_WHITE;
+                    }
+                }
             }
         }
 
@@ -65,6 +104,16 @@ int main(int argc, char* argv[]) {
             // Invert image filter
             if (invert == 1) {
                 invert_image(png_image);
+            }
+
+            // perform grayscale
+            if (grayscale == 1) {
+                grayscale_image(png_image);
+            }
+
+            // perform hue shift
+            if (hue_shift == 1) {
+                hueify_image(png_image, hue_mask, grayscale_threshold);
             }
             
             image_t * scaled_image = scale(png_image, width, height);

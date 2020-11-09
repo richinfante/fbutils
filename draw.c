@@ -17,6 +17,16 @@
 #include <signal.h>
 #include <unistd.h>
 
+// Absolute value difference between two unsigned chars
+// Used for computing color differences inside transforms
+unsigned char absdiff(unsigned char a, unsigned char b) {
+    if (a > b) {
+        return a - b;
+    } else {
+        return b - a;
+    }
+}
+
 // Free an image
 void image_free(image_t * image) {
     free(image->data);
@@ -25,6 +35,47 @@ void image_free(image_t * image) {
     image->data = NULL;
     free(image);
 }
+
+// Invert an image
+void hueify_image(image_t*image, unsigned int mask, int min_level) {
+    for (int i = 0; i < image->width * image->height; i++) {
+        int current = image->data[i];
+        unsigned char r = (0xFF0000 & current) >> 16;
+        unsigned char g = (0x00FF00 & current) >> 8;
+        unsigned char b = (0x0000FF & current) >> 0;
+    
+        int is_rgb = (absdiff(r, g) > min_level || absdiff(g, b) > min_level || absdiff(r, b) > min_level);
+        
+        // If not an RGB value, skip this cell
+        if (!is_rgb) { continue; }
+
+        // This is *NOT* the same as the input color.
+        // Since the components are not shifted, this is a bitwise "or" of each color.
+        // (an easy way to approximate the color intensity)
+        unsigned char mashed = r | g | b;
+
+        // Use the mask to set the color of each slot (R,G,B)
+        unsigned char newr = (mask & (mashed << 16)) >> 16;
+        unsigned char newg = (mask & (mashed << 8)) >> 8;
+        unsigned char newb = (mask & (mashed << 0)) >> 0;
+  
+        // Write back changes
+        unsigned int r_part = (0x0000FF & newr) << 16;
+        unsigned int g_part = (0x0000FF & newg) << 8;
+        unsigned int b_part = (0x0000FF & newb) << 0;
+
+        int newcolor = r_part | g_part | b_part;
+        image->data[i] = newcolor;
+
+        // printf("transform(invert): %d (%#010x) (%u,%u,%u)  -> (%u,%u,%u) ->  (%d, %d, %d), %#010x\n", i, current, r, g, b, newr, newg, newb, r_part, g_part, b_part, newcolor); 	
+    }
+}
+
+// Grayscale operation is just a color transform with the difference set to 0.
+void grayscale_image(image_t* image) {
+    hueify_image(image, 0xFFFFFF, 0);
+}
+
 
 // Invert an image
 void invert_image(image_t*image) {
@@ -42,10 +93,10 @@ void invert_image(image_t*image) {
         unsigned int g_part = (0x0000FF & newg) << 8;
         unsigned int b_part = (0x0000FF & newb) << 0;
 
-	int newcolor = r_part | g_part | b_part;
+        int newcolor = r_part | g_part | b_part;
         image->data[i] = newcolor;
 
-	// printf("transform(invert): %d (%#010x) (%u,%u,%u)  -> (%u,%u,%u) ->  (%d, %d, %d), %#010x\n", i, current, r, g, b, newr, newg, newb, r_part, g_part, b_part, newcolor); 	
+        // printf("transform(invert): %d (%#010x) (%u,%u,%u)  -> (%u,%u,%u) ->  (%d, %d, %d), %#010x\n", i, current, r, g, b, newr, newg, newb, r_part, g_part, b_part, newcolor); 	
     }
 }
 
