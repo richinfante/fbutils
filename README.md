@@ -40,7 +40,7 @@ make
   $ fb-ttymode text
   ```
   
-- `fb-pngdraw` / `fb-jpgdraw`
+- `fb-pngdraw` / `fb-jpgdraw` / `fb-svgdraw`
   - draws an image to the framebuffer
   - options:
     - `-f` - path to the image file to draw.

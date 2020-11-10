@@ -76,7 +76,7 @@ int main(int argc, char* argv[]) {
                 hue_shift = 1;
 
                 // iterate over valid types of hues
-                for (int j = 0; j < strlen(argv[i+1]); j++) {
+                for (size_t j = 0; j < strlen(argv[i+1]); j++) {
                 
                     // Mask types (rgbcymw)
                     if (argv[i+1][j] == 'r') {
