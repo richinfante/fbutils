@@ -29,7 +29,7 @@ make
 - `fb-clear`
   - clears the `/dev/fb0` framebuffer
   - options:
-    - `g` _(optional)_ - grayscale value from 0 (black) to 255 (white)
+    - `-g` _(optional)_ - grayscale value from 0 (black) to 255 (white)
       - example: `fb-clear -g 255`
       
 - `fb-ttymode`
@@ -43,15 +43,19 @@ make
 - `fb-pngdraw` / `fb-jpgdraw`
   - draws an image to the framebuffer
   - options:
-    - `f` - path to the image file to draw.
-    - `x` _(optional)_ default: 0 - the x position to draw
-    - `y` _(optional)_ default: 0 - the y position to draw
-    - `w` _(optional)_ default: display width - the width of the image
-    - `h` _(optional)_ default: display height - the height of the image
+    - `-f` - path to the image file to draw.
+    - `-x` _(optional)_ default: 0 - the x position to draw
+    - `-y` _(optional)_ default: 0 - the y position to draw
+    - `-w` _(optional)_ default: display width - the width of the image
+    - `-h` _(optional)_ default: display height - the height of the image
+    - `-hue [mask]` _(optional)_ default: disabled - apply a hue-shift to the image, in the red, green, blue, cyan, yellow, magenta, or white hue. Valid characters in mask string are "rgbcymw".
+    - `-hue-threshold` _(optional)_ default: 20 - when applying a hue shift, pixels with RGB values abs. differences less than this are ignored.
+    - `-invert` _(optional)_ default: disabled - apply a `255 - x` transform to all pixels in the image, inverting it.
+    - `-grayscale` _(optional)_ default: disabled - shortcut for the options `-hue w -hue-threshold 0`
   - example:
   ```bash
-  $ fb-pngdraw -f foo.png -x 0 -y 0 -w 100 -h 100
-  $ fb-jpgdraw -f foo.jpg -x 0 -y 0 -w 100 -h 100
+  $ fb-pngdraw -f foo.png -x 0 -y 0 -w 100 -h 100 -invert
+  $ fb-jpgdraw -f foo.jpg -x 0 -y 0 -w 100 -h 100 -hue r
   ```
 
 ## TODO
