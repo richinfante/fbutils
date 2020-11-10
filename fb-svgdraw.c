@@ -20,7 +20,7 @@
 #include <sys/kd.h>
 
 #include "draw.h"
-#include "img-png.h"
+#include "img-svg.h"
 
 int main(int argc, char* argv[]) {
     context_t * context = context_create();
@@ -99,26 +99,26 @@ int main(int argc, char* argv[]) {
         }
 
         if (file != NULL) {
-            image_t * png_image = read_png_file(file);
+            image_t * svg_image = read_svg_file(file, width, height);
 
             // Invert image filter
             if (invert == 1) {
-                invert_image(png_image);
+                invert_image(svg_image);
             }
 
             // perform grayscale
             if (grayscale == 1) {
-                grayscale_image(png_image);
+                grayscale_image(svg_image);
             }
 
             // perform hue shift
             if (hue_shift == 1) {
-                hueify_image(png_image, hue_mask, grayscale_threshold);
+                hueify_image(svg_image, hue_mask, grayscale_threshold);
             }
             
-            image_t * scaled_image = scale(png_image, width, height);
+            // image_t * scaled_image = scale(svg_image, width, height);
         
-            draw_image(x, y, scaled_image, context);
+            draw_image(x, y, svg_image, context);
         } else {
             printf("could not open file\n");
         }
